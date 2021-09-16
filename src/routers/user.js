@@ -40,12 +40,39 @@ router.post('/users/logout', auth, async (req, res) => {
     req.user.tokens = tokens;
     await req.user.save();
     res.send(req.user);
-})
+});
+
+// Endpoint - Logout all:
+router.post('/users/logoutall', auth, async (req, res) => {
+    req.user.tokens = [];
+    await req.user.save();
+    res.send(req.user);
+});
 
 // Endpoint - Get user profile:
 router.get('/users/profile', auth, async (req, res) => {
     res.send(req.user);
-})
+});
+
+// Endpoint - Update user profile:
+router.patch('/users/profile', auth, async (req, res) => {
+    const updates = Object.keys(req.body);
+    const validUpdates = ['name', 'email', 'password'];
+    const isValid = updates.every(update => {
+        return validUpdates.includes(update)
+    });
+
+    if (!isValid) {
+        res.status(401).send({error: 'Invalid update'});
+    }
+
+    updates.forEach(update => {
+        req.user[update] = req.body[update]
+    });
+    await req.user.save();
+
+    res.send(req.user);
+});
 
 // Exports:
 module.exports = router;
