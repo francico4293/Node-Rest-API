@@ -21,6 +21,14 @@ router.post('/users', async (req, res) => {
 });
 
 // Endpoint - Login user:
+router.post('/users/login', async (req, res) => {
+    try {
+        const user = await User.verifyUser(req.body.email, req.body.password);
+        res.send(user);
+    } catch(error) {
+        res.status(400).send();
+    }
+})
 
 // Exports:
 module.exports = router;
