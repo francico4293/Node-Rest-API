@@ -74,6 +74,15 @@ userSchema.statics.verifyUser = async (email, password) => {
     return user;
 }
 
+userSchema.methods.toJSON = function() {
+    const userObject = this.toObject();
+
+    delete userObject.tokens;
+    delete userObject.password;
+
+    return userObject;
+}
+
 // Create user model:
 const User = mongoose.model('User', userSchema);
 
