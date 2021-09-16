@@ -32,6 +32,16 @@ router.post('/users/login', async (req, res) => {
     }
 });
 
+// Endpoint - Logout user:
+router.post('/users/logout', auth, async (req, res) => {
+    const tokens = req.user.tokens.filter(token => {
+        return token.token !== req.token
+    });
+    req.user.tokens = tokens;
+    await req.user.save();
+    res.send(req.user);
+})
+
 // Endpoint - Get user profile:
 router.get('/users/profile', auth, async (req, res) => {
     res.send(req.user);
