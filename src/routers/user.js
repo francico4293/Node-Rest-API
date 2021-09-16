@@ -74,5 +74,11 @@ router.patch('/users/profile', auth, async (req, res) => {
     res.send(req.user);
 });
 
+// Endpoint - Delete user profile:
+router.delete('/users/profile', auth, async (req, res) => {
+    await req.user.remove();
+    res.send(req.user);
+});
+
 // Exports:
 module.exports = router;
